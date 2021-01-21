@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+mtcnn = "==0.1.0"
+numpy = "==1.18.5"
+tensorflow = "==2.3.0"
+Keras = "==2.4.3"
+Pillow = "==8.0.1"
+matplotlib = "==3.3.3"
+scikit-learn = "==0.23.2"
+django = "~=3.1.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
