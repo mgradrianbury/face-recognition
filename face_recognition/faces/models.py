@@ -1,4 +1,6 @@
 import os
+from typing import Tuple, Union, List
+
 import numpy
 from io import BytesIO
 from PIL import Image
@@ -6,14 +8,22 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db import models
+from sklearn.metrics import euclidean_distances
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
 from faces.utils import extract_face, get_embedding
 
 
 class FaceLabel(models.Model):
     label = models.SlugField(max_length=200)
 
+    _DETECTION_THRESHOLD = 10
+
     @staticmethod
-    def embeddings():
+    def get_embeddings():
+        """
+        Return x and y where x is embedding array, y is label
+        """
         x, y = list(), list()
         face_labels = FaceLabel.objects.all()
         for face_label in face_labels:
@@ -25,6 +35,38 @@ class FaceLabel(models.Model):
             y.extend(labels)
 
         return numpy.asarray(x), numpy.asarray(y)
+
+    @staticmethod
+    def predict_if_label_exist(path_to_image) -> bool:
+        face = extract_face(path_to_image)
+        embedding = get_embedding(face)
+        image_faces = FaceImage.objects.all()
+        distances = [
+            euclidean_distances([embedding], [f.embedding_array])
+            for f in image_faces
+        ]
+
+        return True if numpy.min(distances) < FaceLabel._DETECTION_THRESHOLD else False
+
+    @staticmethod
+    def predict_labels(path_to_images: List[str]) -> numpy.array:
+        train_x, train_y = FaceLabel.get_embeddings()
+
+        out_encoder = LabelEncoder()
+        out_encoder.fit(train_y)
+        train_y = out_encoder.transform(train_y)
+
+        model = SVC(kernel='linear')
+        model.fit(train_x, train_y)
+
+        images_to_predict = [get_embedding(extract_face(f)) for f in path_to_images]
+        predicted_class = model.predict(images_to_predict)
+
+        return out_encoder.inverse_transform(predicted_class)
+
+    @staticmethod
+    def predict_label(path_to_images: str) -> numpy.array:
+        return FaceLabel.predict_labels([path_to_images])[0]
 
     def __str__(self):
         return self.label
@@ -39,7 +81,7 @@ class FaceImage(models.Model):
     _EMBEDDING_TYPE = numpy.float32
 
     @property
-    def embedding_array(self):
+    def embedding_array(self) -> List:
         return numpy.frombuffer(self.embedding, dtype=self._EMBEDDING_TYPE)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -60,5 +102,5 @@ class FaceImage(models.Model):
         relative_image_storage_path = default_storage.save(storage_path, self.original_image)
         return os.path.join(settings.MEDIA_ROOT, relative_image_storage_path)
 
-    def _get_face_image_name(self):
+    def _get_face_image_name(self) -> str:
         return "{0}_{2}{1}".format(*os.path.splitext(self.original_image.name) + ('face',))

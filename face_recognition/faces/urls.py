@@ -2,7 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('result', views.result, name="result"),
-    path('upload', views.UploadFacesView.as_view(), name="upload"),
+    path('', views.FaceRecognition.as_view(), name="face_recognition"),
 ]

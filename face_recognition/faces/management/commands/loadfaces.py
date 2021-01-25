@@ -16,7 +16,8 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        train_path = "/home/adrian/Downloads/zdjęcia-twarzy/CelebA/Img/temp/train"
+        train_path = "/home/adrian/MyCurse/master_thesis/faces/CelebA/Img/temp/train"
+
         for directory in listdir(train_path):
             images_path = path.join(train_path, directory)
             face_label = FaceLabel(label=directory)
@@ -37,7 +38,10 @@ class Command(BaseCommand):
                     )
                     face_image.save()
                 except IndexError:
-                    self.stdout.write("File {} with label {} can not be parsed".format(image, directory))
+                    self.stdout.write(
+                        msg="File {} for label {} can not be parsed".format(image, directory),
+                        style_func=self.style.WARNING
+                    )
 
             self.stdout.write("Label {} loaded with {} images".format(face_label.label, len(listdir(images_path))))
 

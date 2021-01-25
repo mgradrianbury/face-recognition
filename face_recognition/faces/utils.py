@@ -33,7 +33,7 @@ def get_embedding(face_pixels):
 
 
 def extract_face(file, required_size=(160, 160)):
-    pixels = _prepare_image(file)
+    pixels = _to_pixels(file)
 
     results = _get_mtcnn_detector().detect_faces(pixels)
     x1, y1, width, height = results[0]['box']
@@ -46,7 +46,7 @@ def extract_face(file, required_size=(160, 160)):
     return asarray(image)
 
 
-def _prepare_image(path_to_file, resize_to=(350, 350)):
+def _to_pixels(path_to_file, resize_to=(350, 350)):
     cv2_image = cv2.cvtColor(cv2.imread(path_to_file), cv2.COLOR_BGR2RGB)
     pil_image = Image.fromarray(cv2_image)
     pil_image.thumbnail(resize_to, Image.ANTIALIAS)
