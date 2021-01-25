@@ -1,7 +1,5 @@
 /.idea
 /faces
-/dataset*
-/embeddings*
 /facenet_keras.h5
 /face_recognition/db.sqlite3
 /face_recognition/face_recognition.iml
