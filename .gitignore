@@ -5,3 +5,4 @@
 /face_recognition/face_recognition.iml
 /face_recognition/media
 *.pyc
+/face_recognition/*.csv
