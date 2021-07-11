@@ -12,45 +12,65 @@
             <form class="text-center mt-5" method="post" action="{% url 'face_recognition' %}"
                   enctype="multipart/form-data">
                 {% csrf_token %}
-                <input hidden required accept="image/*" type="file" id="face" name="face">
-                <label for="face" class="btn btn-primary btn-lg">Select a photo</label>
+                <input hidden required accept="image/*" type="file" id="faces" name="faces" multiple>
+                <label for="faces" class="btn btn-primary btn-lg">Select a photos</label>
             </form>
 
-            <figure class="figure d-flex align-items-center">
-                <img id="face_preview" class="figure-img img-fluid rounded" style=";max-height: 250px;max-width: 250px"
-                     alt="" src=""/>
-                <figcaption class="ms-3"></figcaption>
-            </figure>
+            <div id="imagePreview" class="row my-5"></div>
 
+
+            <template id="faceDetectionResult">
+                <div class="col-12 col-lg-6">
+                    <figure class="figure d-flex align-items-center">
+                        <img class="figure-img img-fluid rounded"
+                             style=";max-height: 250px;max-width: 250px"
+                             alt="" src=""/>
+                        <figcaption class="ms-3"></figcaption>
+                    </figure>
+                </div>
+            </template>
 
         </div>
     </div>
 
     <script>
-        function showImage(src, target) {
-            const fr = new FileReader();
-            fr.onload = function (e) {
-                target.src = this.result;
+        const src = document.getElementById("faces");
+        const form = document.getElementsByTagName('form')[0];
+        const url = form.getAttribute('action');
+        const faceDetectionResultTemplate = document.getElementById('faceDetectionResult');
+        const imagePreview = document.getElementById('imagePreview');
 
-                const form = document.querySelector(`form`);
+        src.addEventListener('change', function ($event) {
+            const files = $event.target.files;
+
+            imagePreview.innerHTML = '';
+
+            Array.from(files).forEach(function (file) {
+
+                const clone = faceDetectionResultTemplate.content.cloneNode(true);
+                clone.querySelector('.figure-img').src = URL.createObjectURL(file);
+                const label = clone.querySelector('figcaption');
+
                 const data = new FormData(form)
-                const label = document.querySelector(`figcaption`)
-                label.innerText = 'I am thinking... Please wait...'
-                const url = form.getAttribute('action')
+                data.delete("faces");
+                data.set("face", file);
 
+                label.innerText = "I am thinking...";
+                imagePreview.append(clone);
                 fetch(url, {method: 'post', body: data,})
                     .then(r => r.text())
                     .then(text => label.innerText = text)
                     .catch(() => label.innerText = `Something bad happend. Sorry 😞`)
-            };
-            src.addEventListener("change", function () {
-                fr.readAsDataURL(src.files[0]);
-            });
-        }
+            })
+        })
 
-        const src = document.getElementById("face");
-        const target = document.getElementById("face_preview");
-        showImage(src, target);
+        {#const form = document.querySelector(`form`);#}
+        {#const label = document.querySelector(`figcaption`)#}
+        {#label.innerText = 'I am thinking... Please wait...'#}
+        {##}
+        {#var template = document.querySelector('#productrow');#}
+        {##}
+
     </script>
 
 {% endblock %}
