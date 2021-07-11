@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.views import View
 from faces.models import FaceLabel
+from faces.utils import FaceNotFoundError
 
 
 class FaceRecognition(View):
@@ -17,7 +18,10 @@ class FaceRecognition(View):
         image_path = os.path.join(settings.MEDIA_ROOT, 'face_recognition', str(image))
         default_storage.save(image_path, ContentFile(image.read()))
 
-        label_exists = FaceLabel.predict_if_label_exist(image_path)
+        try:
+            label_exists = FaceLabel.predict_if_label_exist(image_path)
+        except FaceNotFoundError:
+            return HttpResponse("I can not detect face on image.", status=400)
 
         if label_exists is not True:
             return HttpResponse("Sorry. I do not know you.")

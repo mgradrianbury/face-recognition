@@ -39,6 +39,7 @@ class Command(BaseCommand):
 
         data = pd.read_csv(identity_path, header=None, sep=" ")
         ids = data[1].unique()
+
         first_n_faces = ids[:faces_count]
         extra_n_faces = ids[:faces_count + faces_extra]
 

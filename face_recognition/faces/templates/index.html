@@ -1,54 +1,56 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="p-5">
-    <div class="container">
+    <div class="p-5">
+        <div class="container">
 
-        <h1>Face recognition</h1>
-        <p class="lead">
-            Send me a photo with face and I will tell you who you are!
-        </p>
-        <hr class="my-4">
+            <h1>Face recognition</h1>
+            <p class="lead">
+                Send me a photo with face and I will tell you who you are!
+            </p>
+            <hr class="my-4">
 
-        <form class="text-center mt-5" method="post" action="{% url 'face_recognition' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input hidden required accept="image/*" type="file" id="face" name="face">
-            <label for="face" class="btn btn-primary btn-lg">Take a photo</label>
-        </form>
+            <form class="text-center mt-5" method="post" action="{% url 'face_recognition' %}"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <input hidden required accept="image/*" type="file" id="face" name="face">
+                <label for="face" class="btn btn-primary btn-lg">Select a photo</label>
+            </form>
 
-        <figure class="figure d-flex align-items-center">
-            <img id="face_preview" class="figure-img img-fluid rounded" style=";max-height: 250px;max-width: 250px" alt="" src=""/>
-            <figcaption class="ms-3"></figcaption>
-        </figure>
+            <figure class="figure d-flex align-items-center">
+                <img id="face_preview" class="figure-img img-fluid rounded" style=";max-height: 250px;max-width: 250px"
+                     alt="" src=""/>
+                <figcaption class="ms-3"></figcaption>
+            </figure>
 
 
+        </div>
     </div>
-</div>
 
-<script>
-    function showImage(src, target) {
-        const fr = new FileReader();
-        fr.onload = function (e) {
-            target.src = this.result;
+    <script>
+        function showImage(src, target) {
+            const fr = new FileReader();
+            fr.onload = function (e) {
+                target.src = this.result;
 
-            const form = document.querySelector(`form`);
-            const data = new FormData(form)
-            const label = document.querySelector(`figcaption`)
-            label.innerText = 'I am thinking... Please wait...'
-            const url = form.getAttribute('action')
+                const form = document.querySelector(`form`);
+                const data = new FormData(form)
+                const label = document.querySelector(`figcaption`)
+                label.innerText = 'I am thinking... Please wait...'
+                const url = form.getAttribute('action')
 
-            fetch(url, {method: 'post', body: data,})
-            .then(r => r.text())
-            .then(text => label.innerText = text)
-            .catch(() => label.innerText = `Something bad happend. Sorry 😞`)
-        };
-        src.addEventListener("change", function () {
-            fr.readAsDataURL(src.files[0]);
-        });
-    }
+                fetch(url, {method: 'post', body: data,})
+                    .then(r => r.text())
+                    .then(text => label.innerText = text)
+                    .catch(() => label.innerText = `Something bad happend. Sorry 😞`)
+            };
+            src.addEventListener("change", function () {
+                fr.readAsDataURL(src.files[0]);
+            });
+        }
 
-    const src = document.getElementById("face");
-    const target = document.getElementById("face_preview");
-    showImage(src, target);
-</script>
+        const src = document.getElementById("face");
+        const target = document.getElementById("face_preview");
+        showImage(src, target);
+    </script>
 
 {% endblock %}
