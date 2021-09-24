@@ -11,7 +11,7 @@ git clone https://github.com/mgradrianbury/face-recognition
 cd face-recognition
 ```
 
-###   
+### Instalacja Pythona
 
 Aplikacja wymaga Pythona dokładnie w wersji `3.6.9` (z innymi wersjami aplikacja nie była testowana i jest wysoce
 prawdopodobne, że nie zadziała). Aby sprawdzić jaka wersja jest obecnie zainstalowana w systemie, należy wpisać:
