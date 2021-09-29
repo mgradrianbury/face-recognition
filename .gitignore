@@ -1,8 +1,8 @@
 /.idea
-/faces
-/facenet_keras.h5
-/face_recognition/db.sqlite3
 /face_recognition/face_recognition.iml
+
+/faces
+/face_recognition/db.sqlite3
 /face_recognition/media
 *.pyc
 /face_recognition/*.csv

@@ -1,6 +1,7 @@
 from io import BytesIO
 from os import path
 import cv2
+import numpy as np
 import pandas as pd
 from PIL import Image
 from django.core.files import File
@@ -40,8 +41,12 @@ class Command(BaseCommand):
         data = pd.read_csv(identity_path, header=None, sep=" ")
         ids = data[1].unique()
 
-        first_n_faces = ids[:faces_count]
-        extra_n_faces = ids[:faces_count + faces_extra]
+        random_faces = np.random.choice(ids, faces_count + faces_extra)
+        random_n_faces = random_faces[:faces_count]
+        extra_random_n_faces = random_faces
+
+        first_n_faces = random_n_faces
+        extra_n_faces = extra_random_n_faces
 
         for person_id in first_n_faces:
             images_for_peron = data.loc[data[1] == person_id][0].array

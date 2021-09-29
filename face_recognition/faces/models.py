@@ -25,7 +25,7 @@ class _BaseImage(models.Model):
         return numpy.frombuffer(self.embedding, dtype=self._EMBEDDING_TYPE)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        original_image_path = self._get_original_image_path()
+        original_image_path = self.get_system_original_image_path()
         extracted_face_array = extract_face(original_image_path)
         default_storage.delete(original_image_path)
 
@@ -37,7 +37,7 @@ class _BaseImage(models.Model):
 
         super().save(force_insert, force_update, using, update_fields)
 
-    def _get_original_image_path(self) -> str:
+    def get_system_original_image_path(self) -> str:
         storage_path = os.path.join(settings.MEDIA_ROOT, 'face_to_crop', str(self.original_image.name))
         relative_image_storage_path = default_storage.save(storage_path, self.original_image)
         return os.path.join(settings.MEDIA_ROOT, relative_image_storage_path)
@@ -52,7 +52,7 @@ class _BaseImage(models.Model):
 class FaceLabel(models.Model):
     label = models.SlugField(max_length=200)
 
-    _DETECTION_THRESHOLD = 10
+    _DETECTION_THRESHOLD = 10.2
 
     @staticmethod
     def get_embeddings():

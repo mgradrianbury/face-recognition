@@ -1,14 +1,10 @@
 import os
 import shutil
-from io import BytesIO
 from os import path
-import cv2
+
 import numpy
 import pandas as pd
-from PIL import Image
-from django.core.files import File
 from django.core.management import BaseCommand
-from faces.models import FaceImageForTest, FaceLabel, FaceLabelForTest, FaceImage
 
 
 class Command(BaseCommand):

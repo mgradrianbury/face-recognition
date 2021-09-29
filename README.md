@@ -43,7 +43,7 @@ biblioteki należy zainstalować ręcznie.
 ### Przygotowanie aplikacji do uruchomienia
 
 Przed uruchomieniem aplikacji należy utworzyć bazę danych wraz z tabelami. Aplikacja wykorzystuje `SQLite`, więc nie ma
-potrzeby uruchamiać zewnętrznych baz. W tym należy uruchomić komendy:
+potrzeby uruchamiać zewnętrznych baz. W tym celu należy uruchomić komendę:
 
 ```bash
 ./face_recognition/manage.py migrate

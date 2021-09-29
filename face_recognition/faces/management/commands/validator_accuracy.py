@@ -18,7 +18,7 @@ def _run_experiment(all_images, test_image, threshold, good_answer):
 
 
 class Command(BaseCommand):
-    help = 'Check how good is validator'
+    help = 'Check how good is validator on different threshold'
 
     def add_arguments(self, parser):
         pass
