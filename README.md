@@ -11,6 +11,9 @@ git clone https://github.com/mgradrianbury/face-recognition
 cd face-recognition
 ```
 
+Plik `facenet_keras.h5` jest trzymany w `Git LFS`.
+W razie problemów należy pobrać go ręcznie.
+
 ### Instalacja Pythona
 
 Aplikacja wymaga Pythona dokładnie w wersji `3.6.9` (z innymi wersjami aplikacja nie była testowana i jest wysoce
@@ -27,6 +30,9 @@ do utworzenia projektu z wymaganą wersją Pythona:
 ```bash
 sudo pip install pipenv
 pipenv --python 3.6.9
+pipenv shell
+python --version
+# -> Python 3.6.9
 ```
 
 ### Instalacja wymaganych bibliotek
@@ -67,4 +73,3 @@ Aby uruchomić aplikację w tybie developerskim, należy wpisać:
 
 Aplikacja powinna być dostępna pod adresem [http://127.0.0.1:8000](http://127.0.0.1:8000). Dostęp do panelu
 administratora znajduje się pod adresem [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin).
-
