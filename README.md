@@ -7,7 +7,7 @@ Aplikacja, której zadaniem jest rozpoznanie osoby przedstawionej na zdjęciu.
 ### Klonowanie repozytorium
 
 ```bash
-git clone https://github.com/mgradrianbury/face-recognition
+git clone https://github.com/mgradrianbury/face-recognition-system
 cd face-recognition
 ```
 
